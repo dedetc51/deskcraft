@@ -1,3 +1,7 @@
+# deskcraft
+
+This repository contains **deskcraft**, a public fork of RustDesk for Windows x64 and macOS Apple Silicon/Intel. The desktop builds and project-specific update channel are under validation; no stable deskcraft installers have been published. See [project status](DESKCRAFT.md), [release policy](docs/DESKCRAFT_RELEASE.md), and the upstream RustDesk documentation retained below.
+
 <p align="center">
   <img src="res/logo-header.svg" alt="RustDesk - Your remote desktop"><br>
   <a href="#raw-steps-to-build">Build</a> •
