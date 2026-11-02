@@ -1201,6 +1201,7 @@ pub async fn do_check_software_update() -> hbb_common::ResultType<()> {
                     .header("User-Agent", "deskcraft-updater")
                     .send()
                     .await
+                {
                     Ok(resp) => Ok((tls_type, resp)),
                     Err(err) => Err(err.into()),
                 }
