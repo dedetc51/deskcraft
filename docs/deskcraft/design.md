@@ -15,7 +15,7 @@ Créer un client de contrôle à distance nommé **deskcraft**, dérivé de Rust
 
 ### Sources et identité
 
-Créer un dépôt GitHub public `dedetc51/deskcraft`, avec historique de provenance du tag RustDesk 1.5.1, sous-modules, licence, notices et attribution conservés. La première version du code change seulement les points nécessaires à l'identité de deskcraft et aux mises à jour. Les fonctionnalités natives restent activées et les changements de comportement hors mise à jour sont évités. Ajouter un répertoire de préparation graphique (inventaire des icônes, noms, identifiants d'application, écran d'accueil et règles de remplacement), sans redessiner l'interface à ce stade.
+Créer un dépôt GitHub public `dedetc51/deskcraft`, avec provenance documentée du tag RustDesk 1.5.1, sous-modules, licence, notices et attribution conservés. La première version du code change seulement les points nécessaires à l'identité de deskcraft et aux mises à jour. Les fonctionnalités natives restent activées et les changements de comportement hors mise à jour sont évités. Ajouter un répertoire de préparation graphique (inventaire des icônes, noms, identifiants d'application, écran d'accueil et règles de remplacement), sans redessiner l'interface à ce stade.
 
 Choix validé : deskcraft s'installe à côté de RustDesk. Il possède ses propres identifiants d'application, chemins de données et identités d'installation, sans reprendre silencieusement la configuration ou le service d'une installation RustDesk existante. Les utilisateurs pourront configurer explicitement le même serveur ou importer leurs réglages dans une étape ultérieure.
 
