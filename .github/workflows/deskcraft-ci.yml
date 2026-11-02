@@ -1,0 +1,16 @@
+name: deskcraft desktop CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  desktop:
+    uses: ./.github/workflows/flutter-build.yml
+    with:
+      upload-artifact: true

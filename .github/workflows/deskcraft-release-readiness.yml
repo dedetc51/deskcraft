@@ -1,0 +1,48 @@
+name: deskcraft release readiness
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Stable version to prepare (for example 1.5.2)
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  readiness:
+    runs-on: ubuntu-24.04
+    environment: release
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - name: Validate release version
+        env:
+          DESKCRAFT_VERSION: ${{ inputs.version }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          [[ "$DESKCRAFT_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/v${DESKCRAFT_VERSION}" --jq .tag_name 2>/dev/null || true)" = ""
+        shell: bash
+      - name: Check required signing credentials
+        env:
+          DESKCRAFT_UPDATE_ED25519_SEED: ${{ secrets.DESKCRAFT_UPDATE_ED25519_SEED }}
+          DESKCRAFT_UPDATE_ED25519_PUBLIC_KEY: ${{ vars.DESKCRAFT_UPDATE_ED25519_PUBLIC_KEY }}
+          DESKCRAFT_WINDOWS_PFX: ${{ secrets.DESKCRAFT_WINDOWS_PFX }}
+          DESKCRAFT_WINDOWS_PFX_PASSWORD: ${{ secrets.DESKCRAFT_WINDOWS_PFX_PASSWORD }}
+          DESKCRAFT_APPLE_DEVELOPER_ID_P12: ${{ secrets.DESKCRAFT_APPLE_DEVELOPER_ID_P12 }}
+          DESKCRAFT_APPLE_DEVELOPER_ID_PASSWORD: ${{ secrets.DESKCRAFT_APPLE_DEVELOPER_ID_PASSWORD }}
+          DESKCRAFT_APPLE_NOTARY_KEY: ${{ secrets.DESKCRAFT_APPLE_NOTARY_KEY }}
+          DESKCRAFT_APPLE_NOTARY_KEY_ID: ${{ secrets.DESKCRAFT_APPLE_NOTARY_KEY_ID }}
+          DESKCRAFT_APPLE_NOTARY_ISSUER: ${{ secrets.DESKCRAFT_APPLE_NOTARY_ISSUER }}
+        run: |
+          for name in DESKCRAFT_UPDATE_ED25519_SEED DESKCRAFT_UPDATE_ED25519_PUBLIC_KEY DESKCRAFT_WINDOWS_PFX DESKCRAFT_WINDOWS_PFX_PASSWORD DESKCRAFT_APPLE_DEVELOPER_ID_P12 DESKCRAFT_APPLE_DEVELOPER_ID_PASSWORD DESKCRAFT_APPLE_NOTARY_KEY DESKCRAFT_APPLE_NOTARY_KEY_ID DESKCRAFT_APPLE_NOTARY_ISSUER; do
+            if [ -z "${!name}" ]; then
+              echo "Missing required release credential: $name" >&2
+              exit 1
+            fi
+          done
+          python3 -m pip install --require-hashes -r res/update/update_metadata_requirements.txt
+          python3 res/update/generate_update_metadata.py check-key
+        shell: bash
